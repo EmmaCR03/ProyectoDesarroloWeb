@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>TechShop</title>
+    </head>
+    <body>
+       
+        <!-- 1 Presenta el listado de productos a comprar de manera elegante -->
+        <section th:fragment="listadoProductos" id="productos">
+            <div class="row row-cols-2">
+                <h2 class="inline">[[#{index.nuestrosProductos}]]</h2>
+                <div id="resultsBlock">
+                    
+                </div>
+            </div>
+            <div class="row row-cols-3">
+                <div class="card p-2" th:each="p : ${productos}">
+                    <figure>
+                        <img th:src="${p.rutaImagen}"
+                             height="200" alt="alt"/>
+                        <figcaption>
+                            [[${p.precio}]]([[${p.existencias}]])
+                        </figcaption>
+                    </figure>
+                    <form>
+                        <input type="hidden" 
+                               name="idProducto" 
+                               th:value="${p.idProducto}" />
+                        <button 
+                            class="btn btn-light"
+                            id="addCar"
+                            name="addCar"
+                            onclick="addCard(this.form)"
+                            type="button">
+                            <i class="fas fa-cart-plus"></i>
+                        </button>
+                    </form>
+                    <div class="card-header">
+                        <h4>[[${p.descripcion}]]</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>[[${p.detalle}]]</p>
+                    </div>
+                </div>
+            </div>
+        </section>     
+
+         <!-- 2 Presenta el boton para ver el carrito de compras -->
+        <section th:fragment="verCarrito" th:unless="${#lists.isEmpty(listaItems)}">
+            <form action="/carrito/listado">
+                <button type="submit"
+                        class="btn btn-primary">
+                    <i class="fas fa-cart-plus"></i>
+                    [[#{carrito.verCarrito}]] [[${listaTotal}]]
+                </button>
+            </form>
+        </section>
+        
+    </body>
+</html>
